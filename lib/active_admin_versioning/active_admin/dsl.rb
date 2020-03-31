@@ -6,7 +6,15 @@ module ActiveAdminVersioning
 
         active_admin_namespace = config.namespace.name
 
-        controller { include ActiveAdminVersioning::ActiveAdmin::ResourceController }
+        controller do
+          include ActiveAdminVersioning::ActiveAdmin::ResourceController
+
+          private
+
+          def rollback_params
+            params.require(:version).permit(:id, :item_type, :item_id, :event)
+          end
+        end
 
         member_action(:versions) do
           @versions   = resource.versions.reorder(id: :desc, created_at: :desc).page(params[:page])
@@ -14,10 +22,25 @@ module ActiveAdminVersioning
           render "versions"
         end
 
+        member_action :rollbacks do
+          version = PaperTrail::Version.find_by(rollback_params)
+          if version.reify.save
+            version.destroy
+            redirect_to "#{collection_url}/#{collection.first.id}",
+              notice: I18n.t(:success, default: 'SUCCSESS!', scope: [:active_admin, :versioning])
+          else
+            redirect_to "#{collection_url}/#{collection.first.id}",
+              notice: I18n.t(:failed, default: 'FAILED!', scope: [:active_admin, :versioning])
+          end
+        end
+
         with_options only: :show do
-          action_item :version do
-            link_to [:versions, active_admin_namespace, resource_instance_name] do
-              ::PaperTrail::Version.model_name.human
+          action_item :version, only: :show do
+            if resource.versions.present? && !resource.paper_trail.live?
+              version = resource.version
+              link_to rollbacks_admin_admin_user_path(version: { id: version.id, item_type: version.item_type, item_id: version.item_id, event: version.event }) do
+                I18n.t(:rollback, default: 'Rollback', scope: [:active_admin, :versioning])
+              end
             end
           end
 
@@ -46,6 +69,8 @@ module ActiveAdminVersioning
 
       def enabled_paper_trail?
         if config.resource_class.respond_to?(:paper_trail)
+          enabled = ::PaperTrail.request.try(:enabled_for_model?, config.resource_class)
+          return enabled  unless enabled.nil?
           config.resource_class.paper_trail.try(:enabled?)
         else
           config.resource_class.try(:paper_trail_enabled_for_model?)
