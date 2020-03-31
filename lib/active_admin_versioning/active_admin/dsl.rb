@@ -23,13 +23,13 @@ module ActiveAdminVersioning
         end
 
         member_action :rollbacks do
-          version = PaperTrail::Version.find_by(rollback_params)
+          version = ::PaperTrail::Version.find_by(rollback_params)
           if version.reify.save
             version.destroy
-            redirect_to "#{collection_url}/#{collection.first.id}",
+            redirect_to "#{collection_url}/#{params[:id]}",
               notice: I18n.t(:success, default: 'SUCCSESS!', scope: [:active_admin, :versioning])
           else
-            redirect_to "#{collection_url}/#{collection.first.id}",
+            redirect_to "#{collection_url}/#{params[:id]}",
               notice: I18n.t(:failed, default: 'FAILED!', scope: [:active_admin, :versioning])
           end
         end
@@ -38,7 +38,12 @@ module ActiveAdminVersioning
           action_item :version, only: :show do
             if resource.versions.present? && !resource.paper_trail.live?
               version = resource.version
-              link_to rollbacks_admin_admin_user_path(version: { id: version.id, item_type: version.item_type, item_id: version.item_id, event: version.event }) do
+              link_to rollbacks_admin_admin_user_path(version: {
+                                                id: version.id,
+                                                item_type: version.item_type,
+                                                item_id: version.item_id,
+                                                event: version.event
+                                              }) do
                 I18n.t(:rollback, default: 'Rollback', scope: [:active_admin, :versioning])
               end
             end
