@@ -29,7 +29,7 @@ module ActiveAdminVersioning
         with_options only: :show do
           action_item :version, only: :show do
             if resource.versions.present? && !resource.paper_trail.live?
-              link_to [:rollbacks, active_admin_namespace.name, resource_instance_name, version: resource.version.id ] do
+              link_to [:rollbacks, active_admin_namespace, resource_instance_name, version: resource.version.id ] do
                 I18n.t(:rollback, default: 'Rollback', scope: [:active_admin, :versioning])
               end
             end
