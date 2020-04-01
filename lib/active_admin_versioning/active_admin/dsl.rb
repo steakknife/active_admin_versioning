@@ -6,15 +6,7 @@ module ActiveAdminVersioning
 
         active_admin_namespace = config.namespace.name
 
-        controller do
-          include ActiveAdminVersioning::ActiveAdmin::ResourceController
-
-          private
-
-          def rollback_params
-            params.require(:version).permit(:id, :item_type, :item_id, :event)
-          end
-        end
+        controller { include ActiveAdminVersioning::ActiveAdmin::ResourceController }
 
         member_action(:versions) do
           @versions   = resource.versions.reorder(id: :desc, created_at: :desc).page(params[:page])
@@ -23,7 +15,7 @@ module ActiveAdminVersioning
         end
 
         member_action :rollbacks do
-          version = ::PaperTrail::Version.find_by(rollback_params)
+          version = ::PaperTrail::Version.find_by(id: params[:version])
           if version.reify.save
             version.destroy
             redirect_to "#{collection_url}/#{params[:id]}",
@@ -37,13 +29,7 @@ module ActiveAdminVersioning
         with_options only: :show do
           action_item :version, only: :show do
             if resource.versions.present? && !resource.paper_trail.live?
-              version = resource.version
-              link_to rollbacks_admin_admin_user_path(version: {
-                                                id: version.id,
-                                                item_type: version.item_type,
-                                                item_id: version.item_id,
-                                                event: version.event
-                                              }) do
+              link_to [:rollbacks, active_admin_namespace.name, resource_instance_name, version: resource.version.id ] do
                 I18n.t(:rollback, default: 'Rollback', scope: [:active_admin, :versioning])
               end
             end
