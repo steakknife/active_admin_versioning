@@ -4,9 +4,17 @@ module ActiveAdminVersioning
       def versioning
         return unless enabled_paper_trail?
 
+        after_update :set_version
+
         active_admin_namespace = config.namespace.name
 
-        controller { include ActiveAdminVersioning::ActiveAdmin::ResourceController }
+        controller do
+          include ActiveAdminVersioning::ActiveAdmin::ResourceController
+
+          def set_version(object)
+            object.touch
+          end
+        end
 
         member_action(:versions) do
           @versions   = resource.versions.reorder(id: :desc, created_at: :desc).page(params[:page])
