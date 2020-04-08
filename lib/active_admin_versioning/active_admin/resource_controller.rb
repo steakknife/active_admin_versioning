@@ -15,10 +15,6 @@ module ActiveAdminVersioning
         show!
       end
 
-      def info_for_paper_trail
-        { whodunnit_type: @current_user.class.name }
-      end
-
       protected
 
       def user_for_paper_trail
