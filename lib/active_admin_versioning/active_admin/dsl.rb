@@ -25,7 +25,7 @@ module ActiveAdminVersioning
         member_action :rollbacks do
           version = ::PaperTrail::Version.find_by(id: params[:version])
           if version.reify(has_many: true, has_one: true).save
-            version.destroy
+            # version.destroy
             redirect_to "#{collection_url}/#{params[:id]}",
               notice: I18n.t(:success, default: 'SUCCSESS!', scope: [:active_admin, :versioning])
           else
