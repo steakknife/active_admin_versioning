@@ -4,7 +4,7 @@ module ActiveAdminVersioning
       def versioning
         return unless enabled_paper_trail?
 
-        after_update :set_version
+        # after_update :set_version
 
         active_admin_namespace = config.namespace.name
 
