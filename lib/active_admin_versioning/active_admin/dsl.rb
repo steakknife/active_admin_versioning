@@ -49,6 +49,9 @@ module ActiveAdminVersioning
                 row ::PaperTrail::Version.model_name.human do |_|
                   version_number
                 end
+                row "Created by" do |r|
+                  r.whodunnit
+                end
                 row :created_at
               end
               paginate versions, theme: :version
