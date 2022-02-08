@@ -19,6 +19,7 @@ jobs:
 
     env:
       RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.0.3
 
       # Rails verifies the time zone in DB is the same as the time zone of the Rails app
       TZ: "Europe/London"
