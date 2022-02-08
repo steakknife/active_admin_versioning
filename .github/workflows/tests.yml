@@ -32,6 +32,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.0.3
           # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
 
