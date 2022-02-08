@@ -1,3 +1,5 @@
+[![CI/CD Pipeline](https://github.com/baarkerlounger/active_admin_versioning/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/baarkerlounger/active_admin_versioning/actions/workflows/tests.yml)
+
 # ActiveAdminVersioning
 
 Good for auditing or versioning for [Active Admin](https://github.com/activeadmin/activeadmin) (using [PaperTrail](https://github.com/airblade/paper_trail))
