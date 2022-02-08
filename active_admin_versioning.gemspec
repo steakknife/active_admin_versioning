@@ -18,9 +18,9 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 2.1.0"
 
-  gem.add_dependency "activeadmin", ">= 1.0.0.pre4"
+  gem.add_dependency "activeadmin", ">= 2.9"
   gem.add_dependency "paper_trail", ">= 4.2.0"
 
-  gem.add_development_dependency "bundler", "~> 1.13"
-  gem.add_development_dependency "rake",    "~> 10.0"
+  gem.add_development_dependency "bundler", "~> 2.3"
+  gem.add_development_dependency "rake",    "~> 13.0"
 end

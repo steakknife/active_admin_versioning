@@ -1,5 +1,9 @@
 rails_major_version = Rails::VERSION::STRING[0].to_i
 
+inject_into_file "config/application.rb",
+                 "require \"sprockets/railtie\"\n",
+                 after: "require \"rails/all\"\n"\
+
 # Configure default_url_options in test environment
 inject_into_file "config/environments/test.rb",
                  "  config.action_mailer.default_url_options = { :host => 'example.com' }\n",
@@ -25,11 +29,13 @@ inject_into_file(
   before: "end"
 )
 
+rake "db:migrate"
+
 # Prepare ActiveAdmin
 generate :'active_admin:install --skip-users'
 generate :'active_admin:resource Post'
 inject_into_file(
-  "app/admin/post.rb",
+  "app/admin/posts.rb",
   "  permit_params :id, :title, :body\n",
   after: "ActiveAdmin.register Post do\n"
 )
@@ -39,3 +45,4 @@ run "rm -r spec"
 route "root :to => 'admin/dashboard#index'"
 
 rake "db:migrate"
+rake "db:test:prepare"

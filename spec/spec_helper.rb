@@ -17,6 +17,7 @@ system "rake setup" unless File.exist?(ENV["RAILS_ROOT"])
 
 # require ActiveRecord to ensure that Ransack loads correctly
 require "active_record"
+require "action_view/railtie"
 require "active_admin"
 ActiveAdmin.application.load_paths = [ENV["RAILS_ROOT"] + "/app/admin"]
 

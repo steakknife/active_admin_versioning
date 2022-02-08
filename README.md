@@ -79,6 +79,14 @@ This alternative "whodunnit" will only be visible in "Version" sidebar and "Vers
 
 ![](https://cloud.githubusercontent.com/assets/15371677/20568746/cff3ccfe-b1e0-11e6-96b8-00d8bc241a4e.png)
 
+## Development
+Run tests:
+```sh
+bundle install
+rake setup
+rake spec
+```
+
 ## License
 
 [MIT License](http://opensource.org/licenses/MIT)
