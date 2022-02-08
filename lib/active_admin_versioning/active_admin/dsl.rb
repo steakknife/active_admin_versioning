@@ -35,6 +35,11 @@ module ActiveAdminVersioning
         end
 
         with_options only: :show do
+          action_item :version do
+            link_to send("versions_admin_#{resource_instance_name}_path") do
+              ::PaperTrail::Version.model_name.human
+            end
+          end
           action_item :version, only: :show do
             if resource.versions.present? && !resource.paper_trail.live?
               link_to [:rollbacks, active_admin_namespace, resource_instance_name, version: resource.version.id ] do
@@ -49,8 +54,10 @@ module ActiveAdminVersioning
                 row ::PaperTrail::Version.model_name.human do |_|
                   version_number
                 end
-                row "Created by" do |r|
-                  r.whodunnit
+                row :event, &:event_i18n
+                row :whodunnit do |record|
+                  record.send(ActiveAdminVersioning.configuration.whodunnit_attribute_name).presence ||
+                      span(t("views.version.unknown_user"), class: "empty")
                 end
                 row :created_at
               end
