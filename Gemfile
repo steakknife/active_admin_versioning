@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gemspec
 
 gem "rails",       "~> 7.0.0"
-gem "paper_trail", "~> 12.2.0", git: "https://github.com/baarkerlounger/paper_trail", branch: "dluhc-fixes"
-gem "activeadmin", git: "https://github.com/tagliala/activeadmin.git", branch: "feature/railties-7"
+gem "paper_trail", "~> 12.2.0"
+gem "activeadmin", github: "activeadmin/activeadmin"
 gem "pry"
 gem "appraisal"
 gem "sprockets-rails"
